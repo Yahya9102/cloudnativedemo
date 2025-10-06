@@ -1,8 +1,71 @@
 package main
 
-func main() {
+import (
+	"cloudnativedemo/internals/models"
+	"cloudnativedemo/internals/repository"
+	"fmt"
+)
+
+
+func main(){
+	
+	repo := repository.NewUserRepository()
+
+	userOne := repo.Add(models.User{Name: "Yahya", Age: 34})
+
+	userTwo := repo.Add(models.User{Name: "Martin", Age: 25})
+
+
+	fmt.Println("Alla användare i vår system")
+
+	for _, u := range repo.GetAll(){
+		fmt.Printf("ID: %d, Name: %s, Age: %d \n", u.ID, u.Name, u.Age )
+	}
+
+
+	fmt.Println("Skapade användare")
+	fmt.Println(userOne)
+	fmt.Println(userTwo)
+	
 
 }
+
+/*
+	Day 3
+	Struckts 
+
+	
+type User struct {
+	Name  string
+	Email string
+}
+
+
+func (u *User) Greet() {
+	fmt.Println("Hej:", u.Name)
+}
+
+
+
+func main() {
+	user := User{Name: "Yahya", Email: "yahya.hussein@systementor.se"}
+
+	user.Greet()
+
+	
+
+	user.Name = "Anton";
+
+	user.Greet()
+
+
+}
+
+
+
+*/
+
+
 
 /*Day 2 - Loops, Arrays och Slices, funktioner och mappar
 
