@@ -11,7 +11,8 @@ func RunMenu (userService *service.UserService){
 	for {
 		fmt.Println("1: Skapa användare")
 		fmt.Println("2: Lista alla användare")
-		fmt.Println("3: Avsluta")
+		fmt.Println("3: Radera användare")
+		fmt.Println("4: Avsluta")
 
 
 		var choice int;
@@ -45,9 +46,21 @@ func RunMenu (userService *service.UserService){
 			}
 			 
 		case 3:
+			var id int
+			fmt.Println("Ange id för användare som ska raderas")
+			fmt.Scanln(&id)
+
+			if userService.DeleteUser(id) {
+				fmt.Println("Användare raderad")
+			} else {
+				fmt.Println("Kunda inte hitta en användare")
+			}
+
+
+		case 4:
 			fmt.Println("Avslutar programmet")	
 			return
-
+	
 		default: 
 		fmt.Println("Ogiltig val försök igen please...")
 		}

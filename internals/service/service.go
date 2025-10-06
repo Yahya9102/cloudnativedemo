@@ -26,3 +26,7 @@ func (s *UserService) ListUsers() []models.User{
 	return s.repo.GetAll()
 }
 
+func (s *UserService) DeleteUser(id int) bool {
+	return s.repo.Delete(id)
+}
+

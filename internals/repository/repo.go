@@ -1,6 +1,8 @@
 package repository
 
-import "cloudnativedemo/internals/models"
+import (
+	"cloudnativedemo/internals/models"
+)
 
 type UserRepository struct {
 	users  []models.User
@@ -28,4 +30,17 @@ func (r *UserRepository) GetAll() []models.User{
 }
 
 
-// Database logic for the repository
+
+
+func (r *UserRepository) Delete(id int) bool{
+	
+	for i, u := range r.users {
+		if u.ID == id {
+			r.users = append(r.users[:i], r.users[i+1:]...)
+			return  true
+		}
+	}
+	return false
+}
+
+
