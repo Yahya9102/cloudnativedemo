@@ -22,7 +22,7 @@ func main(){
 		fmt.Printf("ID: %d, Name: %s, Age: %d \n", u.ID, u.Name, u.Age )
 	}
 
-
+	
 	fmt.Println("Skapade användare")
 	fmt.Println(userOne)
 	fmt.Println(userTwo)
