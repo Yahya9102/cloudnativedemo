@@ -1,8 +1,8 @@
 package main
 
 import (
-	"cloudnativedemo/internals/models"
 	"cloudnativedemo/internals/repository"
+	"cloudnativedemo/internals/service"
 	"fmt"
 )
 
@@ -11,23 +11,21 @@ func main(){
 	
 	repo := repository.NewUserRepository()
 
-	userOne := repo.Add(models.User{Name: "Yahya", Age: 34})
-
-	userTwo := repo.Add(models.User{Name: "Martin", Age: 25})
+	userService := service.NewUserService(repo)
 
 
-	fmt.Println("Alla användare i vår system")
+	userOne := userService.CreateUser("Yahya", 34)
+	userTwo := userService.CreateUser("Martin", 23)
 
-	for _, u := range repo.GetAll(){
+
+	fmt.Println("Alla våra användare")
+
+	for _, u := range userService.ListUsers() {
 		fmt.Printf("ID: %d, Name: %s, Age: %d \n", u.ID, u.Name, u.Age )
 	}
-
 	
-	fmt.Println("Skapade användare")
-	fmt.Println(userOne)
-	fmt.Println(userTwo)
-	
-
+	fmt.Println( userOne.Name)
+	fmt.Println( userTwo.Name)
 }
 
 /*
