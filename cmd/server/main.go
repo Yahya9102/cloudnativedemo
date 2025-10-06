@@ -1,31 +1,17 @@
 package main
 
 import (
+	"cloudnativedemo/internals/api"
 	"cloudnativedemo/internals/repository"
 	"cloudnativedemo/internals/service"
-	"fmt"
 )
 
 
+
 func main(){
-	
 	repo := repository.NewUserRepository()
-
 	userService := service.NewUserService(repo)
-
-
-	userOne := userService.CreateUser("Yahya", 34)
-	userTwo := userService.CreateUser("Martin", 23)
-
-
-	fmt.Println("Alla våra användare")
-
-	for _, u := range userService.ListUsers() {
-		fmt.Printf("ID: %d, Name: %s, Age: %d \n", u.ID, u.Name, u.Age )
-	}
-	
-	fmt.Println( userOne.Name)
-	fmt.Println( userTwo.Name)
+	api.RunMenu(userService)
 }
 
 /*
