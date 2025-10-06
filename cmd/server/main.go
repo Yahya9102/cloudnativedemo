@@ -2,16 +2,12 @@ package main
 
 import (
 	"cloudnativedemo/internals/api"
-	"cloudnativedemo/internals/repository"
-	"cloudnativedemo/internals/service"
 )
 
 
 
 func main(){
-	repo := repository.NewUserRepository()
-	userService := service.NewUserService(repo)
-	api.RunMenu(userService)
+	api.RunMenu()
 }
 
 /*

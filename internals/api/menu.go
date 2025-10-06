@@ -1,17 +1,20 @@
 package api
 
 import (
-	"cloudnativedemo/internals/service"
 	"fmt"
 )
 
 
-func RunMenu (userService *service.UserService){
+func add(a, b float64) float64 {
+	return  a + b
+}
+
+
+
+func RunMenu (){
 
 	for {
-		fmt.Println("1: Skapa användare")
-		fmt.Println("2: Lista alla användare")
-		fmt.Println("3: Radera användare")
+		fmt.Println("1: add")
 		fmt.Println("4: Avsluta")
 
 
@@ -22,42 +25,19 @@ func RunMenu (userService *service.UserService){
 
 		switch choice {
 		case 1: 
-			var name string
-			var age int
+			 var numberOne, numberTwo float64;
 		
-			fmt.Println("Skriv in ditt namn..")
-			fmt.Scanln(&name)
+			fmt.Println("Skriv in första talet")
+			fmt.Scanln(&numberOne)
 			
-			fmt.Println("Skriv in ålder..")
-			fmt.Scanln(&age)
+			fmt.Println("Skriv in andra talet..")
+			fmt.Scanln(&numberTwo)
 
-			userService.CreateUser(name,age)
 			
+			result := add(numberOne, numberTwo)
+			fmt.Printf("Resultat: %.2f \n", result)
 
 		case 2:
-			users := userService.ListUsers()
-			if len(users) == 0 {
-				fmt.Println("Finns inga användare")
-			} else {
-				fmt.Println("Här är alla våra användare")
-				for _, u := range users {
-					fmt.Printf("ID: %d, name: %s, age: %d \n", u.ID, u.Name, u.Age)
-				}
-			}
-			 
-		case 3:
-			var id int
-			fmt.Println("Ange id för användare som ska raderas")
-			fmt.Scanln(&id)
-
-			if userService.DeleteUser(id) {
-				fmt.Println("Användare raderad")
-			} else {
-				fmt.Println("Kunda inte hitta en användare")
-			}
-
-
-		case 4:
 			fmt.Println("Avslutar programmet")	
 			return
 	
