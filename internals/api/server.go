@@ -2,6 +2,7 @@ package api
 
 import (
 	"cloudnativedemo/internals/service"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -41,6 +42,51 @@ func StartServer(userService *service.UserService) {
 
 		// returnerar vi en 201, med user details
 		c.JSON(http.StatusOK, user)
+	})
+
+
+	r.DELETE("/users/:id", func(c *gin.Context) {
+		idStr := c.Param("id")
+		var id int
+		fmt. Sscanf(idStr, "%d", &id) // Konvertera från string to int
+
+		// User deleted if found
+		if userService.DeleteUser(id) {
+			c.Status(http.StatusNoContent)
+		} else {
+			c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+		}
+
+	})
+
+
+	r.PUT("/users/:id", func(c *gin.Context) {
+
+		idStr := c.Param("id")
+		var id int
+		fmt. Sscanf(idStr, "%d", &id) // Konvertera från string to int
+
+
+		// Skapa en kompia av struct för att läsa in JSON från request
+		var input struct{	
+			Name string `json:"name"`
+			Age int `json:"age"` 
+		}
+
+		// validerat formatet
+		if err := c.BindJSON(&input); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON"})
+			return
+		} 
+
+		user, ok := userService.UpdateUsers(id, input.Name, input.Age)
+
+		if !ok {
+			c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+		}
+
+		c.JSON(http.StatusOK, user)
+
 	})
 	
 	r.Run(":8080")
