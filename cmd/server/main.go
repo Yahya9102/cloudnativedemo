@@ -9,9 +9,11 @@ import (
 
 
 func main(){
-	repo := repository.NewUserRepository()
-	userService := service.NewUserService(repo)
-	api.RunMenu(userService)
+	 repo := repository.NewUserRepository()
+	 userService := service.NewUserService(repo)
+	// api.RunMenu(userService)
+	api.StartServer(userService)
+
 }
 
 /*
