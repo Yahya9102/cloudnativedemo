@@ -10,31 +10,44 @@ import (
 func StartServer(userService *service.UserService){
 
 
-	// registrerar en route för vår endpoint /users
-	http.HandleFunc("/users", func(w http.ResponseWriter, r * http.Request) {
+	http.HandleFunc("/users", func(w http.ResponseWriter, r *http.Request) {
 
-		// Kontroller om metod = get
-		if r.Method == http.MethodGet {
+		switch r.Method {
 
-			// Hämta alla våra användare
+		case http.MethodGet:
 			users := userService.ListUsers()
 
-			// S ätta svaret content type till JSON
 			w.Header().Set("Content-Type", "application/json")
-
-			// Skicka tillbaka alla användare som JSON
 			json.NewEncoder(w).Encode(users)
 
 
-		} else {
+		case http.MethodPost:
 			
-			// Returnera error om metod inte är get
-			http.Error(w, "Metoden är inte tillåten ", http.StatusMethodNotAllowed)
-		}
+			// Skapa json bodyn som ska skickas in
+			var input struct{	
+				Name string `json:"name"`
+				Age int `json:"age"` 
+			}	
+
+				// Avkodar och error check
+			if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
+				http.Error(w, "Icke JSON", http.StatusBadRequest)
+				return
+			}
+
+			// Skapa ny user
+			user := userService.CreateUser(input.Name, input.Age)
+
+			// Returnera http status kod
+			w.WriteHeader(http.StatusCreated)
+
+			// returnera skapade användare
+			json.NewEncoder(w).Encode(user)
+		
+		} 
 
 	})
 
-	// Starta servern på port 8080
 	http.ListenAndServe(":8080", nil)
 
 }
