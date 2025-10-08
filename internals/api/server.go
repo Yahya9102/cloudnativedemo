@@ -21,7 +21,27 @@ func StartServer(userService *service.UserService) {
 	})
 
 
-	
+
+	// Vår post anrop
+	r.POST("/users", func(c *gin.Context) {
+		// Skapa en kompia av struct för att läsa in JSON från request
+		var input struct{	
+			Name string `json:"name"`
+			Age int `json:"age"` 
+		}
+
+		// validerat formatet
+		if err := c.BindJSON(&input); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON"})
+			return
+		} 
+
+		// skapa user via service lager
+		user := userService.CreateUser(input.Name,input.Age)
+
+		// returnerar vi en 201, med user details
+		c.JSON(http.StatusOK, user)
+	})
 	
 	r.Run(":8080")
 
