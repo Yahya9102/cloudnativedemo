@@ -2,11 +2,37 @@ package api
 
 import (
 	"cloudnativedemo/internals/service"
-	"encoding/json"
-	"fmt"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
+// funktion som start Gin server
+func StartServer(userService *service.UserService) {
+
+	
+	// Skapar en default server med logger och recovery	
+	r := gin.Default()
+
+	// Vår Get request där vi hämtar alla användare
+	r.GET("/users", func(c *gin.Context) {
+		users := userService.ListUsers()
+		c.JSON(http.StatusOK, users)
+	})
+
+
+	
+	
+	r.Run(":8080")
+
+}
+
+
+
+
+
+
+/*
 // Starta http server som kan hantera requests
 func StartServer(userService *service.UserService){
 
@@ -90,3 +116,6 @@ func StartServer(userService *service.UserService){
 	http.ListenAndServe(":8080", nil)
 
 }
+
+
+*/
