@@ -70,7 +70,6 @@ func StartServer(userService *service.UserService){
 				return
 			}
 			
-			
 			// Updatera vår användare
 			user, ok := userService.UpdateUsers(id,input.Name, input.Age)
 
@@ -79,21 +78,14 @@ func StartServer(userService *service.UserService){
 				http.Error(w, "Användare hittades ej", http.StatusNotFound)
 				return
 			}
-
-
-
 			// returnera uppdaterade användaren
 			w.WriteHeader(http.StatusOK)
 			json.NewEncoder(w).Encode(user)
-
-
 		default: 
 			http.Error(w, "Something went wrong!", http.StatusBadRequest)
 		
 			} 
 	})
-
-
 	// Starta server på port 8080
 	http.ListenAndServe(":8080", nil)
 
