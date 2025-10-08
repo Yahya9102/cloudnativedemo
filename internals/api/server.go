@@ -93,6 +93,8 @@ func StartServer(userService *service.UserService){
 			} 
 	})
 
+
+	// Starta server på port 8080
 	http.ListenAndServe(":8080", nil)
 
 }
