@@ -30,3 +30,11 @@ func (s *UserService) DeleteUser(id int) bool {
 	return s.repo.Delete(id)
 }
 
+
+func (s *UserService) UpdateUsers(id int, name string, age int) (models.User, bool){
+	// skapa ny användare med uppdaterad meterial
+	updated := models.User{Name: name, Age: age}
+
+	// kalla på repo funktion och mata in objektet
+	return s.repo.Update(id, updated)
+}

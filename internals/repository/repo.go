@@ -44,3 +44,24 @@ func (r *UserRepository) Delete(id int) bool{
 }
 
 
+
+func(r *UserRepository) Update(id int, updated models.User) (models.User, bool) {
+
+
+	// Loopar genom alla våra användare i vår slice
+	for i, u := range r.users {
+		if u.ID == id { // Om ID matchar
+			r.users[i].Name = updated.Name // Updatera namn
+			r.users[i].Age = updated.Age // Updatera age
+			
+
+			// Returnera uppdaterade användare + true
+			return r.users[i], true
+		}
+	}
+
+	// or else inge användare hittades med det ID:t
+	return models.User{}, false
+}
+
+
