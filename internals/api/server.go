@@ -3,6 +3,7 @@ package api
 import (
 	"cloudnativedemo/internals/service"
 	"encoding/json"
+	"fmt"
 	"net/http"
 )
 
@@ -43,8 +44,31 @@ func StartServer(userService *service.UserService){
 
 			// returnera skapade användare
 			json.NewEncoder(w).Encode(user)
+
+
+		case http.MethodDelete:
+			
+			// Hämta id från url users?id=1
+			idStr := r.URL.Query().Get("id")
+			
+			var id int
+			
+			fmt. Sscanf(idStr, "%d", &id) // Konvertera från string to int
+
+
+
+			fmt.Println(id)
+			if userService.DeleteUser(id) {
+				w.WriteHeader(http.StatusNoContent)
+			} else {
+				http.Error(w, "User not found", http.StatusNotFound)
+			}
+
+		default: 
+			http.Error(w, "Something went wrong!", http.StatusBadRequest)
 		
-		} 
+			} 
+
 
 	})
 
