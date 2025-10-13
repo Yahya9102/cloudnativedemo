@@ -1,7 +1,7 @@
 package api
 
 import (
-	"cloudnativedemo/internals/service"
+	"cloudnativedemo/user-service/internals/service"
 	"fmt"
 )
 

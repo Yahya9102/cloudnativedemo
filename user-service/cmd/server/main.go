@@ -1,9 +1,9 @@
 package main
 
 import (
-	"cloudnativedemo/internals/api"
-	"cloudnativedemo/internals/repository"
-	"cloudnativedemo/internals/service"
+	"cloudnativedemo/user-service/internals/api"
+	"cloudnativedemo/user-service/internals/repository"
+	"cloudnativedemo/user-service/internals/service"
 )
 
 

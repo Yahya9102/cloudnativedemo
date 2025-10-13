@@ -40,15 +40,12 @@ func (c *UserClient) FetchAllUsers() ([]models.User, error) {
 		return nil, fmt.Errorf("felaktigt svar från user-service: %v", resp.Status)
 	}
 
-
 	 // Tolka JSON svaret till en SLICE AV USERS
-
 	 var users []models.User
 	 if err := json.NewDecoder(resp.Body).Decode(&users); err != nil {
 		return nil, fmt.Errorf("kunde inte tolka JSON ")
 	 }
 
 	 return users, nil
-
 
 }

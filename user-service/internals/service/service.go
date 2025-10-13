@@ -1,8 +1,8 @@
 package service
 
 import (
-	"cloudnativedemo/internals/models"
-	"cloudnativedemo/internals/repository"
+	"cloudnativedemo/user-service/internals/models"
+	"cloudnativedemo/user-service/internals/repository"
 )
 
 //UserService ansvarar för logik kring användare

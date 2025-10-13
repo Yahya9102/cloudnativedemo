@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"cloudnativedemo/internals/models"
+	"cloudnativedemo/user-service/internals/models"
 )
 
 type UserRepository struct {
