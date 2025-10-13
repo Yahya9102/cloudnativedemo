@@ -1,4 +1,4 @@
-module cloudnativedemo
+module cloudnativedemo/user-service
 
 go 1.24.5
 
