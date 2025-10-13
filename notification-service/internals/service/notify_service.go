@@ -3,6 +3,7 @@ package service
 import (
 	"cloudnativedemo/notification-service/internals/client"
 	"cloudnativedemo/notification-service/internals/models"
+	"fmt"
 )
 
 
@@ -25,4 +26,28 @@ func (s *NotifyService) FetchUsers() ([]models.User, error) {
 		return nil, err
 	}
 	return users, nil
+}
+
+
+// Skapa en ny funktion som skickar notis till användare
+func (s *NotifyService) SendNotification(message string)[] string {
+
+
+	var logs []string
+
+	users, err := s.userClient.FetchAllUsers()
+
+	if err != nil {
+		logs = append(logs, fmt.Sprintf("kunde inte nå user-service: %v", err.Error()))
+		return logs
+	}
+
+	// Gå genom varje användare (aka loopa genom och "skicka" en notis)
+	for _, user := range users {
+		log := fmt.Sprintf("Skickade notis till %s: %s", user.Name, message)
+		logs = append(logs, log)
+		fmt.Println(log)
+	}
+	return logs
+
 }
