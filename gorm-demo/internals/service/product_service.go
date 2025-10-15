@@ -27,3 +27,8 @@ func (s *ProductService) CreateProduct(name string, price int) models.Product {
 func(s *ProductService) ListProducts() []models.Product{
 	return s.repo.GetAll()
 }
+
+// UpdateProduct uppdaterar en produkt via repository
+func (s *ProductService) UpdateProduct(id uint, name string, price int)(models.Product, bool){
+	return s.repo.Update(id, name, price)
+}

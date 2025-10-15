@@ -2,6 +2,7 @@ package api
 
 import (
 	"cloudnativedemo/gorm-demo/internals/service"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -36,6 +37,35 @@ func StartServer(ProductService *service.ProductService) {
 	r.GET("/products", func(c *gin.Context) {
 		products := ProductService.ListProducts() // Hämtar alla produkter via service
 		c.JSON(http.StatusOK, products) // Returnerar JSON array med alla produkter + 200 OK (HTTP status code
+	})
+
+
+	r.PUT("/products/:id", func(c *gin.Context) {
+		
+		var id uint
+
+		fmt.Sscanf(c.Param("id"), "%d", &id)
+
+		var input struct {
+			Name  string `json:"name"`
+			Price int    `json:"price"`
+		}
+
+		if err := c.BindJSON(&input); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Ogiltig JSON"})
+			return
+		}
+
+		product, ok := ProductService.UpdateProduct(id, input.Name, input.Price)
+
+		if !ok {
+			c.JSON(http.StatusNotFound, gin.H{"error": "produkt hittades ej"})
+			return
+		}
+
+		c.JSON(http.StatusOK, product)
+
+
 	})
 
 
