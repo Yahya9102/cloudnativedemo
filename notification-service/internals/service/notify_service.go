@@ -9,13 +9,17 @@ import (
 
 
 type NotifyService struct {
-	userClient *client.UserClient // Vi lagrar en pekare till vår userClient
+	userClient *client.UserClient
+	logs [] string // Vi lagrar en pekare till vår userClient
 }
 
 
 // Den skapar en ny instans av NotifyService
 func NewNotifyService(userClient * client.UserClient) *NotifyService{
-	return &NotifyService{userClient: userClient}
+	return &NotifyService{
+		userClient: userClient,
+		logs: []string{},
+	}
 }
 
 
@@ -48,6 +52,42 @@ func (s *NotifyService) SendNotification(message string)[] string {
 		logs = append(logs, log)
 		fmt.Println(log)
 	}
+	s.logs = append(s.logs, logs...)
 	return logs
 
+}
+
+
+
+
+// Funktion för att filtrera användare baserat på deras ålder 18+
+
+func (s *NotifyService) FetchAdultUsers() ([]models.User, error){
+	users, err := s.userClient.FetchAllUsers();
+	
+	if err != nil {
+		return nil, err
+	}
+
+	var adults []models.User
+
+	for _, user := range users {
+		if user.Age >= 18{
+			adults = append(adults, user)
+		}
+	}
+	return adults, nil
+}
+
+
+// Return all logs
+func (s *NotifyService) GetLogs() []string {
+	return s.logs
+}
+
+
+// Clear logs
+
+func (s *NotifyService) ClearLogs(){
+	s.logs = []string{}
 }

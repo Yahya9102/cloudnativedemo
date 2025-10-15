@@ -48,5 +48,26 @@ func StartServer(NotifyService *service.NotifyService){
 	})
 
 
+	router.GET("/notify/adults", func(c *gin.Context) {
+		adults, err := NotifyService.FetchAdultUsers()
+		if err != nil {
+			c.JSON(http.StatusBadGateway, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, adults)
+	})
+
+
+	router.GET("/notify/logs", func(c *gin.Context) {
+		logs := NotifyService.GetLogs()
+		c.JSON(http.StatusOK, gin.H{"log:": logs})
+	})
+
+
+	router.DELETE("/notify/clear", func(c *gin.Context) {
+		NotifyService.ClearLogs()
+		c.JSON(http.StatusOK, gin.H{"Status": "Loggar rensade"})
+	})
+
 	router.Run(":8081") // Starta server på port 8081
 }
