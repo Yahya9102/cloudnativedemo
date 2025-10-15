@@ -61,7 +61,12 @@ func (r *ProductRepository) Update(id uint, name string, price int) (models.Prod
 func (r *ProductRepository) Delete(id uint) bool {
 	// Delete from products where id = ?
 
-	result := r.db.Delete(&models.Product{}, id)
+
+	// HARD DELETE
+	 result := r.db.Unscoped().Delete(&models.Product{}, id)
+
+
+	// result := r.db.Delete(&models.Product{}, id)
 	return  result.RowsAffected > 0
 
 }
