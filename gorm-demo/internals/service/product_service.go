@@ -32,3 +32,8 @@ func(s *ProductService) ListProducts() []models.Product{
 func (s *ProductService) UpdateProduct(id uint, name string, price int)(models.Product, bool){
 	return s.repo.Update(id, name, price)
 }
+
+// DeleteProduct tar bort en produkt via repository
+func(s *ProductService) DeleteProduct(id uint) bool {
+	return s.repo.Delete(id)
+}

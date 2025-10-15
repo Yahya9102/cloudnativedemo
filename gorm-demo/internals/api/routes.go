@@ -69,5 +69,19 @@ func StartServer(ProductService *service.ProductService) {
 	})
 
 
+	r.DELETE("/products/:id", func(c *gin.Context) {
+		var id uint
+		fmt.Sscanf(c.Param("id"), "%d", &id)
+
+		if !ProductService.DeleteProduct(id) {
+			c.JSON(http.StatusNotFound, gin.H{"error": "Produkten hittades inte"})
+			return
+		}
+
+		c.Status(http.StatusNoContent) // Returnera en 204 No Content (HTTP status code
+
+	})
+
+
 	r.Run(":8082")
 }

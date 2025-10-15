@@ -56,3 +56,12 @@ func (r *ProductRepository) Update(id uint, name string, price int) (models.Prod
 	return product, true
 
 }
+
+
+func (r *ProductRepository) Delete(id uint) bool {
+	// Delete from products where id = ?
+
+	result := r.db.Delete(&models.Product{}, id)
+	return  result.RowsAffected > 0
+
+}
