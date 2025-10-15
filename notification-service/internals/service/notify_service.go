@@ -87,7 +87,33 @@ func (s *NotifyService) GetLogs() []string {
 
 
 // Clear logs
-
 func (s *NotifyService) ClearLogs(){
 	s.logs = []string{}
+}
+
+
+// send notification to a specific user via ID
+func (s *NotifyService) SendNotificationToUser(id int, message string) (string, error) {
+
+	// Hämta alla användare
+
+	users, err := s.userClient.FetchAllUsers()
+
+	if err != nil {
+		return "", fmt.Errorf("couldn´t fetch user %v", err.Error())
+	}
+
+	// Loopa genom användarna
+
+	for _, user := range users {
+		if user.ID == id {
+			log := fmt.Sprintf("Notis skickad till %s (ID %d): %s", user.Name, user.ID, message)
+			s.logs = append(s.logs, log)
+			return log, nil
+		
+		}
+	}
+
+	return "", fmt.Errorf("inge användare med id %d hittades", id)
+
 }

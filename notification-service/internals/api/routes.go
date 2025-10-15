@@ -2,6 +2,7 @@ package api
 
 import (
 	"cloudnativedemo/notification-service/internals/service"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -67,6 +68,38 @@ func StartServer(NotifyService *service.NotifyService){
 	router.DELETE("/notify/clear", func(c *gin.Context) {
 		NotifyService.ClearLogs()
 		c.JSON(http.StatusOK, gin.H{"Status": "Loggar rensade"})
+	})
+
+
+
+
+	router.POST("/notify/user/:id", func(c *gin.Context) {
+
+		idString := c.Param("id")
+		var id int
+		fmt.Sscanf(idString, "%d", &id)
+
+
+		var input struct {
+			Message string `json:"message"` // Vi förväntar oss ett fält som heter message i JSON body
+		}
+
+		if err := c.BindJSON(&input); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Ogiltig JSON"})
+			return
+		}
+
+		logMsg , err := NotifyService.SendNotificationToUser(id, input.Message)
+		if err != nil {
+			c.JSON(http.StatusBadGateway, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{
+			"status": "notis skickad",
+			"log": logMsg,
+		})
+
 	})
 
 	router.Run(":8081") // Starta server på port 8081
