@@ -6,6 +6,16 @@ import (
 	"cloudnativedemo/notification-service/internals/service"
 )
 
+/*
+	TODO från förra lektionen:
+	1- Filtrera vuxna användare
+	2- Visa notifieringshistorik
+	3- Rensa loggar
+	4- Skicka notis till en specifik användare
+
+*/
+
+
 func main() {
 	
 	// Skapa en client som pekar mot user-service
