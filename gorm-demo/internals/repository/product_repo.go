@@ -12,7 +12,6 @@ type ProductRepository struct {
 	db *gorm.DB // Pekare till aktiva databasanslutningen
 }
 
-
 func NewProductRepository() *ProductRepository {
 
 	dsn := "root:12345@tcp(127.0.0.1:3306)/gorm_demo?charset=utf8mb4&parseTime=True&loc=Local" // Databas url
