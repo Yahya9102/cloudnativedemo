@@ -15,6 +15,21 @@ type UserRepository struct {
 
 func NewUserRepository() *UserRepository {
 	
+
+/*
+
+	// DSN (Data Source Name) för PostgreSQL
+	dsn := "host=127.0.0.1 user=admin password=admin123 dbname=accounts port=3307 sslmode=disable TimeZone=Europe/Stockholm"
+
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	if err != nil {
+		log.Fatalf("Kunde inte ansluta till databasen: %v", err)
+	}
+
+*/
+
+
+
 	// Definera DSN (Data Source Name)
 	dsn := "root:12345@tcp(127.0.0.1:3306)/accounts?charset=utf8mb4&parseTime=True&loc=Local"
 
