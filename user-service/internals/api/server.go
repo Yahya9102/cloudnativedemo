@@ -41,13 +41,20 @@ func StartServer(userService *service.UserService) {
 		c.JSON(http.StatusOK, user)
 	})
 
+		// Vår Get request där vi hämtar alla användare
+	r.GET("/users", func(c *gin.Context) {
+		
+		users, err := userService.ListUsers()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Kunda inte hämta användare"})
+		}
+		c.JSON(http.StatusOK, users)
+
+	})
+
+
 	/*
 	
-	// Vår Get request där vi hämtar alla användare
-	r.GET("/users", func(c *gin.Context) {
-		users := userService.ListUsers()
-		c.JSON(http.StatusOK, users)
-	})
 
 
 

@@ -25,12 +25,14 @@ func (s *UserService) CreateUser(name string, age int) (*models.User, error) {
 }
 
 
+func (s *UserService) ListUsers() ([]models.User, error) {
+	return s.repo.GetAllUsers()
+}
+
+
+
 /*
 
-
-func (s *UserService) ListUsers() []models.User{
-	return s.repo.GetAll()
-}
 
 func (s *UserService) DeleteUser(id int) bool {
 	return s.repo.Delete(id)

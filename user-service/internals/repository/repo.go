@@ -16,7 +16,7 @@ type UserRepository struct {
 func NewUserRepository() *UserRepository {
 	
 	// Definera DSN (Data Source Name)
-	dsn := "root:12345@tcp(127.0.0.1:3306)/users?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := "root:12345@tcp(127.0.0.1:3306)/accounts?charset=utf8mb4&parseTime=True&loc=Local"
 
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
@@ -46,14 +46,20 @@ func (r *UserRepository) CreateUser(user *models.User) error {
 
 
 
+
+func (r *UserRepository) GetAllUsers() ([]models.User, error){
+	var users [] models.User
+	err := r.DB.Find(&users).Error
+	return users, err
+	
+}
+
+
+
+
 /*
 
 
-
-
-func (r *UserRepository) GetAll() []models.User{
-	return r.users
-}
 
 
 
