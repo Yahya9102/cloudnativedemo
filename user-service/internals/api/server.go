@@ -2,6 +2,7 @@ package api
 
 import (
 	"cloudnativedemo/user-service/internals/service"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -53,6 +54,40 @@ func StartServer(userService *service.UserService) {
 	})
 
 
+	
+	r.PUT("/users/:id", func(c *gin.Context) {
+
+		idStr := c.Param("id")
+		var id uint
+		fmt.Sscanf(idStr, "%d", &id) // Konvertera från string to uint (Positiv integer)
+
+
+		// Skapa en kompia av struct för att läsa in JSON från request
+		var input struct{	
+			Name string `json:"name"`
+			Age int `json:"age"` 
+		}
+
+
+
+		// validerat formatet
+		if err := c.BindJSON(&input); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Ogiltig JSON"})
+			return
+		} 
+
+		
+		if err := userService.UpdateUser(id, input.Name, input.Age); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Kunde inte uppdatera användaren"})
+			
+		}
+
+		c.JSON(http.StatusOK, gin.H{"message": "Användaren uppdaterad"})
+
+	})
+
+
+
 	/*
 	
 
@@ -73,34 +108,6 @@ func StartServer(userService *service.UserService) {
 	})
 
 
-	r.PUT("/users/:id", func(c *gin.Context) {
-
-		idStr := c.Param("id")
-		var id int
-		fmt. Sscanf(idStr, "%d", &id) // Konvertera från string to int
-
-
-		// Skapa en kompia av struct för att läsa in JSON från request
-		var input struct{	
-			Name string `json:"name"`
-			Age int `json:"age"` 
-		}
-
-		// validerat formatet
-		if err := c.BindJSON(&input); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON"})
-			return
-		} 
-
-		user, ok := userService.UpdateUsers(id, input.Name, input.Age)
-
-		if !ok {
-			c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
-		}
-
-		c.JSON(http.StatusOK, user)
-
-	})
 
 	*/
 	
