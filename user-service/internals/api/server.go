@@ -86,30 +86,24 @@ func StartServer(userService *service.UserService) {
 
 	})
 
-
-
-	/*
 	
-
-
 
 	r.DELETE("/users/:id", func(c *gin.Context) {
 		idStr := c.Param("id")
-		var id int
-		fmt. Sscanf(idStr, "%d", &id) // Konvertera från string to int
+		var id uint
+		fmt. Sscanf(idStr, "%d", &id) // Konvertera från string to uint
 
-		// User deleted if found
-		if userService.DeleteUser(id) {
-			c.Status(http.StatusNoContent)
-		} else {
-			c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+
+		if err := userService.DeleteUser(id); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Kunde inte ta bort användaren"})
+			
 		}
+
+		c.Status(http.StatusNoContent)
 
 	})
 
 
-
-	*/
 	
 	r.Run(":8080")
 

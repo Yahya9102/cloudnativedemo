@@ -37,12 +37,7 @@ func (s *UserService) UpdateUser(id uint, name string, age int) error{
 }
 
 
-/*
-
-
-func (s *UserService) DeleteUser(id int) bool {
-	return s.repo.Delete(id)
+func (s *UserService) DeleteUser(id uint) error {
+	return s.repo.DeleteUser(id)
 }
 
-
-*/

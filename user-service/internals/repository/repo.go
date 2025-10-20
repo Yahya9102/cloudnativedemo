@@ -64,25 +64,7 @@ func(r *UserRepository) UpdateUser(id uint, name string, age int) error {
 
 
 
-
-
-/*
-
-
-
-
-
-
-func (r *UserRepository) Delete(id int) bool{
-	
-	for i, u := range r.users {
-		if u.ID == id {
-			r.users = append(r.users[:i], r.users[i+1:]...)
-			return  true
-		}
-	}
-	return false
+func (r *UserRepository) DeleteUser(id uint) error{
+	return r.DB.Unscoped().Delete(&models.User{}, id).Error
 }
 
-
-*/
