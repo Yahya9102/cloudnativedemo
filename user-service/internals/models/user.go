@@ -1,7 +1,9 @@
 package models
 
+import "gorm.io/gorm"
+
 type User struct {
-	ID   int
+	gorm.Model //Auto inkluderar ID, CreatedAt, UpdatedAt, DeletedAt
 	Name string
 	Age  int
 }

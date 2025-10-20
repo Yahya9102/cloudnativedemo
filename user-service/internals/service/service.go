@@ -17,10 +17,16 @@ func NewUserService(repo *repository.UserRepository) *UserService{
 }
 
 
-func (s *UserService) CreateUser(name string, age int) models.User {
-	user := models.User{Name: name, Age: age}
-	return s.repo.Add(user)
+func (s *UserService) CreateUser(name string, age int) (*models.User, error) {
+	user := &models.User{Name: name, Age: age}
+	err:= s.repo.CreateUser(user)
+	return user, err
+
 }
+
+
+/*
+
 
 func (s *UserService) ListUsers() []models.User{
 	return s.repo.GetAll()
@@ -38,3 +44,5 @@ func (s *UserService) UpdateUsers(id int, name string, age int) (models.User, bo
 	// kalla på repo funktion och mata in objektet
 	return s.repo.Update(id, updated)
 }
+
+*/

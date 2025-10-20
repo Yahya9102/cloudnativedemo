@@ -1,10 +1,6 @@
 package api
 
-import (
-	"cloudnativedemo/user-service/internals/service"
-	"fmt"
-)
-
+/*
 
 func RunMenu (userService *service.UserService){
 
@@ -21,18 +17,18 @@ func RunMenu (userService *service.UserService){
 		fmt.Scanln(&choice)
 
 		switch choice {
-		case 1: 
+		case 1:
 			var name string
 			var age int
-		
+
 			fmt.Println("Skriv in ditt namn..")
 			fmt.Scanln(&name)
-			
+
 			fmt.Println("Skriv in ålder..")
 			fmt.Scanln(&age)
 
 			userService.CreateUser(name,age)
-			
+
 
 		case 2:
 			users := userService.ListUsers()
@@ -44,7 +40,7 @@ func RunMenu (userService *service.UserService){
 					fmt.Printf("ID: %d, name: %s, age: %d \n", u.ID, u.Name, u.Age)
 				}
 			}
-			 
+
 		case 3:
 			var id int
 			fmt.Println("Ange id för användare som ska raderas")
@@ -58,15 +54,17 @@ func RunMenu (userService *service.UserService){
 
 
 		case 4:
-			fmt.Println("Avslutar programmet")	
+			fmt.Println("Avslutar programmet")
 			return
-	
-		default: 
+
+		default:
 		fmt.Println("Ogiltig val försök igen please...")
 		}
-		
+
 	}
 
 
-	
+
 }
+
+*/

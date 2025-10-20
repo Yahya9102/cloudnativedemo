@@ -2,27 +2,53 @@ package repository
 
 import (
 	"cloudnativedemo/user-service/internals/models"
+	"log"
+
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
+// UserRepo  ansvarar för DB operationer
 type UserRepository struct {
-	users  []models.User
-	nextID int
+	DB *gorm.DB
 }
 
 func NewUserRepository() *UserRepository {
-	return &UserRepository{
-		users:  []models.User{},
-		nextID: 1,
+	
+	// Definera DSN (Data Source Name)
+	dsn := "root:12345@tcp(127.0.0.1:3306)/users?charset=utf8mb4&parseTime=True&loc=Local"
+
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+
+	if err != nil {
+		log.Fatalf("Kunde inte ansluta till databasen: %v", err)
 	}
+
+	err = db.AutoMigrate(&models.User{})
+
+	if err != nil {
+		log.Fatalf("Kunde inte migrera modellen: %v", err)
+	}
+
+	log.Println("Ansluten till databasen :)")
+
+
+	return &UserRepository{DB: db}
+
 }
 
 
-func (r *UserRepository) Add(user models.User) models.User {
-	user.ID = r.nextID
-	r.nextID++
-	r.users = append(r.users, user)
-	return user
+
+func (r *UserRepository) CreateUser(user *models.User) error {
+	return r.DB.Create(user).Error
 }
+
+
+
+
+/*
+
+
 
 
 func (r *UserRepository) GetAll() []models.User{
@@ -65,3 +91,4 @@ func(r *UserRepository) Update(id int, updated models.User) (models.User, bool) 
 }
 
 
+*/

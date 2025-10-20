@@ -2,7 +2,6 @@ package api
 
 import (
 	"cloudnativedemo/user-service/internals/service"
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -14,12 +13,6 @@ func StartServer(userService *service.UserService) {
 	
 	// Skapar en default server med logger och recovery	
 	r := gin.Default()
-
-	// Vår Get request där vi hämtar alla användare
-	r.GET("/users", func(c *gin.Context) {
-		users := userService.ListUsers()
-		c.JSON(http.StatusOK, users)
-	})
 
 
 
@@ -38,11 +31,24 @@ func StartServer(userService *service.UserService) {
 		} 
 
 		// skapa user via service lager
-		user := userService.CreateUser(input.Name,input.Age)
+		user, err := userService.CreateUser(input.Name,input.Age)
+
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Kunda inte skapa användare"})
+		}
 
 		// returnerar vi en 201, med user details
 		c.JSON(http.StatusOK, user)
 	})
+
+	/*
+	
+	// Vår Get request där vi hämtar alla användare
+	r.GET("/users", func(c *gin.Context) {
+		users := userService.ListUsers()
+		c.JSON(http.StatusOK, users)
+	})
+
 
 
 	r.DELETE("/users/:id", func(c *gin.Context) {
@@ -88,6 +94,8 @@ func StartServer(userService *service.UserService) {
 		c.JSON(http.StatusOK, user)
 
 	})
+
+	*/
 	
 	r.Run(":8080")
 
