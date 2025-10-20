@@ -104,6 +104,75 @@ func StartServer(userService *service.UserService) {
 	})
 
 
+	r.POST("/notis", func(c *gin.Context) {
+		var input struct {
+			UserID uint `json:"userId"`
+			Message string `json:"message"`
+		}
+
+		if err := c.BindJSON(&input); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Ogiltig JSON"})
+		}
+
+
+
+		if err := userService.CreateNotification(input.UserID, input.Message); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Kunde inte skapa notis"})
+		}
+
+		c.JSON(http.StatusCreated, gin.H{"message": "Notis skapad"})	
+
+	})
+
+
+	r.GET("/notis/:userId", func(c *gin.Context) {
+
+		idStr := c.Param("userId")
+		var userId uint
+		fmt. Sscanf(idStr, "%d", &userId) // Konvertera från string to uint
+
+
+
+		notifications, err := userService.ListNotifications(userId)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Kunde inte hämta notiser"})
+			return
+		}
+
+		c.JSON(http.StatusOK, notifications)
+
+
+	})
+
+
+	r.PUT("/notis/:id/read", func(c *gin.Context) {
+		idStr := c.Param("id")
+		var userId uint
+		fmt. Sscanf(idStr, "%d", &userId) 
+
+
+		if err := userService.MarkAsRead(userId); err != nil{
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "kunde inte uppdatera notis"})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"message": "Noptis markerad som läst"})
+	})
+
+
+	r.DELETE("/notis/:id", func(c *gin.Context) {
+		idStr := c.Param("id")
+		var id uint
+		fmt. Sscanf(idStr, "%d", &id) 
+
+		if err := userService.DeleteNotification(id); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Kunde inte ta bort notis"})
+			return
+		}		
+
+		c.Status(http.StatusNoContent)
+	})
+
 	
 	r.Run(":8080")
 
