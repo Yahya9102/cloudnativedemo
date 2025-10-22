@@ -41,27 +41,3 @@ func (s *UserService) DeleteUser(id uint) error {
 	return s.repo.DeleteUser(id)
 }
 
-func (s *UserService) CreateNotification(userID uint, message string) error {
-
-	notification := &models.Notification{
-		UserId: userID,
-		Message: message,
-		IsRead: false,
-	}
-
-	return s.repo.CreateNotification(notification)
-}
-
-
-func (s *UserService) ListNotifications(userID uint) ([]models.Notification, error){
-	return s.repo.GetNotificationsByUser(userID)
-}
-
-
-func(s *UserService) MarkAsRead(id uint) error {
-	return s.repo.UpdateNotification(id, true)
-}
-
-func (s *UserService) DeleteNotification(id uint) error {
-	return s.repo.DeleteNotification(id)
-}

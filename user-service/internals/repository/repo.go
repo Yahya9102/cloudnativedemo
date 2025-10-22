@@ -39,7 +39,7 @@ func NewUserRepository() *UserRepository {
 		log.Fatalf("Kunde inte ansluta till databasen: %v", err)
 	}
 
-	err = db.AutoMigrate(&models.User{}, &models.Notification{})
+	err = db.AutoMigrate(&models.User{})
 
 	if err != nil {
 		log.Fatalf("Kunde inte migrera modellen: %v", err)
@@ -50,29 +50,6 @@ func NewUserRepository() *UserRepository {
 
 	return &UserRepository{DB: db}
 
-}
-
-
-func(r * UserRepository) GetNotificationsByUser(userID uint) ([]models.Notification, error) {
-	var notifications []models.Notification
-
-	err := r.DB.Where("user_id = ?", userID).Find(&notifications).Error
-	return notifications, err
-}
-
-
-func (r *UserRepository) CreateNotification(notification *models.Notification) error {
-	return r.DB.Create(notification).Error
-}
-
-
-func(r *UserRepository) UpdateNotification(id uint, isRead bool) error {
-	return r.DB.Model(&models.Notification{}).Where("id = ?", id).Update("is_read",isRead).Error
-}
-
-
-func(r *UserRepository) DeleteNotification(id uint) error {
-	return r.DB.Unscoped().Delete(&models.Notification{}, id).Error
 }
 
 
