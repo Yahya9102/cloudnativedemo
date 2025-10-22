@@ -1,26 +1,48 @@
 package service
 
 import (
-	"cloudnativedemo/notification-service/internals/client"
 	"cloudnativedemo/notification-service/internals/models"
-	"fmt"
+	"cloudnativedemo/notification-service/internals/repository"
 )
 
 
 
 type NotifyService struct {
-	userClient *client.UserClient
-	logs [] string // Vi lagrar en pekare till vår userClient
+	repo *repository.Repository
 }
 
 
-// Den skapar en ny instans av NotifyService
-func NewNotifyService(userClient * client.UserClient) *NotifyService{
-	return &NotifyService{
-		userClient: userClient,
-		logs: []string{},
+
+func NewNotifyService(repo *repository.Repository) *NotifyService{
+	return &NotifyService{repo: repo}	
+}
+
+
+func (s *NotifyService) CreateNotification(UserID uint, message string) (*models.Notification, error) {
+
+
+	// skapar ny notis baserat på datan vi får in via API
+	notis := &models.Notification{
+		UserID: UserID,
+		Message: message,
+		IsRead: false,
 	}
+	// Skickar till dB för ett skapa notis
+	err := s.repo.CreateNotification(notis)
+
+	return notis, err
+
 }
+
+
+
+
+func(s *NotifyService) ListNotifications() ([]models.Notification, error) {
+	return s.repo.GetAllNotifications()
+}
+
+
+/*
 
 
 // Vi hämtar alla users från user-service
@@ -117,3 +139,4 @@ func (s *NotifyService) SendNotificationToUser(id int, message string) (string, 
 	return "", fmt.Errorf("inge användare med id %d hittades", id)
 
 }
+	*/

@@ -1,5 +1,6 @@
 package client
 
+/*
 import (
 	"cloudnativedemo/notification-service/internals/models"
 	"encoding/json"
@@ -21,7 +22,7 @@ func NewUserClient(baseURl string) *UserClient {
 func (c *UserClient) FetchAllUsers() ([]models.User, error) {
 	// Här skulle du implementera logiken för att anropa user-service
 
-	// Vår URL tex localhost:8808/	
+	// Vår URL tex localhost:8808/
 	url := c.BaseURL + "/users"
 
 
@@ -30,7 +31,7 @@ func (c *UserClient) FetchAllUsers() ([]models.User, error) {
 	if err != nil {
 		return nil, fmt.Errorf("kunde inte nå user-service: %v", err)
 	}
-	
+
 	// Stäng anslutningen när vi är klara!
 	defer resp.Body.Close()
 
@@ -49,3 +50,5 @@ func (c *UserClient) FetchAllUsers() ([]models.User, error) {
 	 return users, nil
 
 }
+
+*/
