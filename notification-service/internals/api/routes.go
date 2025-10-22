@@ -50,8 +50,26 @@ func StartServer(NotifyService *service.NotifyService){
 	})
 
 
+
+	router.GET("/notifications/combined", func(c *gin.Context) {
+		
+		result, err := NotifyService.GetCombinedNotifications()
+
+		if err != nil {
+			c.JSON(http.StatusBadGateway, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{
+			"status": "Ok(fallback används om user-service är nere)",
+			"data": result,
+		})
+	})
+
 	router.Run(":8081") // Starta server på port 8081
 }
+
+
 
 
 

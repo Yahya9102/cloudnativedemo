@@ -3,12 +3,20 @@ package service
 import (
 	"cloudnativedemo/notification-service/internals/models"
 	"cloudnativedemo/notification-service/internals/repository"
+	"encoding/json"
+	"fmt"
+	"net/http"
 )
 
 
 
 type NotifyService struct {
 	repo *repository.Repository
+}
+
+type CombinedNotification struct {
+	UserName string `json:"user_name"` // Användarens namn från user-service 
+	Message string `json:"message"`
 }
 
 
@@ -40,6 +48,96 @@ func (s *NotifyService) CreateNotification(UserID uint, message string) (*models
 func(s *NotifyService) ListNotifications() ([]models.Notification, error) {
 	return s.repo.GetAllNotifications()
 }
+
+
+func (s *NotifyService) GetCombinedNotifications() ([]CombinedNotification, error) {
+
+	// Hämta alla notiser från den egna databasen
+
+	notifications, err := s.repo.GetAllNotifications()
+
+	if err != nil {
+		return  nil, fmt.Errorf("kunde inte hämta notiser: %v", err)
+	}
+
+
+	response, err := http.Get("http://localhost:8080/users") // Anrop mot vår user-service api
+
+	if err != nil {
+		fmt.Println("Kunde inte nå user-service, använder fallback data..")
+		return buildFallback(notifications),nil
+	}
+
+	defer response.Body.Close() //Stäng anslutning efter användning
+
+
+
+
+	
+	if response.StatusCode != http.StatusOK {
+		fmt.Printf("user-service svarade med http status: %d", response.StatusCode)
+		return buildFallback(notifications),nil
+
+	}
+
+
+
+
+	//Dekoda json svaret från user-service till en slice av User objektet
+	var users []models.User
+
+	if err := json.NewDecoder(response.Body).Decode(&users); err != nil {
+		
+		fmt.Println("Kunde inte tolka JSON, något gick fel kan vara w/e, använder fallback data")
+		return buildFallback(notifications), nil
+
+	}
+
+
+
+	var combined []CombinedNotification
+
+	for _, n := range notifications {
+		found := false
+		for _, u := range users {
+			if int(n.UserID) == u.ID {
+				combined = append(combined, CombinedNotification{
+					UserName: u.Name,
+					Message: n.Message,
+				})
+				found = true
+			}
+		}
+		if !found {
+			combined = append(combined, CombinedNotification {
+				UserName: "Okänd användare",
+				Message: n.Message,
+			})
+		}
+	}
+	
+
+	return combined, nil
+
+}
+
+
+
+
+func buildFallback(notifications []models.Notification) []CombinedNotification {
+	var fallback []CombinedNotification
+
+	for _, n := range notifications {
+		fallback = append(fallback, CombinedNotification{
+			UserName: "Okänt (user-service offline)",
+			Message: n.Message,
+		})
+	}
+	return  fallback
+}
+
+
+
 
 
 /*
