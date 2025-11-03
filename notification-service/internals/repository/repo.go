@@ -13,9 +13,9 @@ type Repository struct {
 }
 
 
-func NewRepository() *Repository {
+func NewRepository(dns string) *Repository {
 
-	dns := "root:12345@tcp(127.0.0.1:3306)/notifications?charset=utf8mb4&parseTime=True&loc=Local"
+	// dns := "root:12345@tcp(127.0.0.1:3306)/notifications?charset=utf8mb4&parseTime=True&loc=Local"
 
 
 	db, err := gorm.Open(mysql.Open(dns), &gorm.Config{})

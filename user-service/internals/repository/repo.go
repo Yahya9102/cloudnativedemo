@@ -13,7 +13,27 @@ type UserRepository struct {
 	DB *gorm.DB
 }
 
-func NewUserRepository() *UserRepository {
+func NewUserRepository(dsn string) *UserRepository {
+
+/*
+
+	if err:= godotenv.Load(); err != nil {
+		log.Fatal("Kunde inte läsa .env filen",err)
+	}
+
+	dbUser := os.Getenv("DB_USER");
+	dbPass := os.Getenv("DB_PASS");
+	dbName := os.Getenv("DB_NAME");
+	dbHost := os.Getenv("DB_HOST")
+	dbPort := os.Getenv("DB_PORT")
+
+	fmt.Println(dbUser,dbPass,dbName,dbHost,dbPort)
+
+
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",dbUser,dbPass,dbHost,dbPort,dbName)
+*/
+	
+
 	
 
 /*
@@ -31,7 +51,7 @@ func NewUserRepository() *UserRepository {
 
 
 	// Definera DSN (Data Source Name)
-	dsn := "root:12345@tcp(127.0.0.1:3306)/accounts?charset=utf8mb4&parseTime=True&loc=Local"
+	// dsn := "root:12345@tcp(127.0.0.1:3306)/accounts?charset=utf8mb4&parseTime=True&loc=Local"
 
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
