@@ -29,3 +29,24 @@ func TestListUsers_ReturnsAll(t *testing.T) {
 	assert.Len(t, users,2)
 	
 }
+
+func TestUpdateUser_Succeeds(t *testing.T) {
+	repo := NewInMemoryRepo()   
+	service := NewUserService(repo) 
+
+	user, _ := service.CreateUser("Yahya", 34)
+
+
+	ok := service.UpdateUser(user.ID, "Rasmus", 35)
+	
+	
+	assert.True(t, ok)
+
+	all := service.ListUsers();
+
+	assert.Equal(t, "Rasmus", all[0].Name)
+	assert.Equal(t, 35, all[0].Age)
+	
+
+}
+

@@ -9,6 +9,7 @@ type User struct {
 type Repo interface {
 	Add(user User) User
 	All() []User
+	Update(id int, name string, age int) bool
 }
 
 type inMemoryRepo struct {
@@ -56,6 +57,21 @@ func (s *UserService) CreateUser(name string, age int) (User, bool) {
 	return user, true
 }
 
+func (r *inMemoryRepo) Update(id int, name string, age int) bool {
+	for i, u := range r.users {
+		if u.ID == id {
+			r.users[i].Name = name
+			r.users[i].Age = age
+			return true
+		}
+	}
+	return false
+}
+
 func (s *UserService) ListUsers() []User {
 	return s.repo.All()
+}
+
+func (s *UserService) UpdateUser(id int, name string, age int) bool {
+	return s.repo.Update(id, name, age)
 }
