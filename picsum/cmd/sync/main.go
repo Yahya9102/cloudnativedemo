@@ -1,6 +1,43 @@
 package main
 
 import (
+	"cloudnativedemo/picsum/internals/picsumclient"
+	"cloudnativedemo/picsum/internals/uploader"
+	"fmt"
+	"time"
+)
+
+func main() {
+
+	picsum := picsumclient.NewClient()
+	uploader := uploader.NewClient("http://localhost:8082")
+
+	
+	images, err := picsum.ListImages(1, 5)
+	if err != nil {
+		panic(err)
+	}
+
+
+	for i, img := range images {
+		key := img.ID + ".jpg"
+		
+		err := uploader.Upload(key, img.DownloadUrl)
+
+		if err != nil {
+			fmt.Printf("kunde inte ladda upp bild %s: %v\n", key, err)
+			continue
+		}
+		fmt.Printf("%d) uppladdad bild %s från %s\n", i, key, img.DownloadUrl)
+		time.Sleep(300 * time.Millisecond)
+	}
+
+	fmt.Println("Har försökt ladda upp alla bilder")
+
+}
+	
+/*
+import (
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -17,7 +54,7 @@ import (
     "download_url": "https://picsum.photos/id/0/5000/3333"
   }
 
-*/
+
 
 // Steg 1 skapa ett struct som motsvarar ett object i APIet
 type PicsumImage struct {
@@ -26,14 +63,15 @@ type PicsumImage struct {
 	Width int `json:"width"`
 	Height int `json:"height"`
 	URL string `json:"url"`
-	DownloadUrl string `json:"download_url"` 
+	DownloadUrl string `json:"download_url"`
 }
+
 
 
 
 func main (){
 
-	// Bygger vår http client med Gos inbygda biblotek 
+	// Bygger vår http client med Gos inbygda biblotek
 	client := &http.Client{
 		Timeout: 10 * time.Second,
 	}
@@ -76,16 +114,9 @@ func main (){
 
 
 
-
-
-
-
-
-
-
-
-
 }
 
 
 
+
+*/

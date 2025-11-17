@@ -34,6 +34,7 @@ func StartServer(s3c *s3client.Client) {
 
 		if err := s3c.PutString(context.Background(), input.Key, input.Content); err != nil {
 			c.JSON(http.StatusBadGateway, gin.H{"error": err.Error()})
+			return 
 		}
 
 		c.JSON(http.StatusOK, gin.H{
